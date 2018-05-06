@@ -63,11 +63,11 @@ public class EntryActivity extends AppCompatActivity{
 
         toggleEmptyNotes();
 
-        /**
-         * On long press on RecyclerView item, open alert dialog
-         * with options to choose
-         * Edit and Delete
-         * */
+        /*
+          On long press on RecyclerView item, open alert dialog
+          with options to choose
+          Edit and Delete
+          */
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
                 recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
@@ -106,13 +106,39 @@ public class EntryActivity extends AppCompatActivity{
     }
 
     /**
+     * Create Entry
+     * @param entry to be created
+     */
+    private void createEntry(Entry entry) {
+        // inserting note in db and getting
+        // newly inserted note id
+        long id = db.insertEntry(entry);
+
+        // get the newly inserted note from db
+        Entry n = db.getEntry(id);
+
+        if (n != null) {
+            // adding new note to array list at 0 position
+            itemList.add(0, n);
+
+            // refreshing the list
+            adapter.notifyDataSetChanged();
+
+            toggleEmptyNotes();
+        }
+    }
+
+    /**
      * Updating note in db and updating
      * item in the list by its position
      */
-    private void updateNote(String note, int position) {
+    private void updateEntry(String note, int position) {
         Entry n = itemList.get(position);
-        // updating note text
+
+        // updating brief
         n.setTittle(note);
+        // updating brief
+        n.setBrief(note);
 
         // updating note in db
         db.updateEntry(n);
@@ -148,7 +174,7 @@ public class EntryActivity extends AppCompatActivity{
         CharSequence colors[] = new CharSequence[]{Properties.K_EDIT, Properties.K_DELETE};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(Properties.M_CHOSOSE);
+        builder.setTitle(Properties.M_CHOOSE);
         builder.setItems(colors, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -169,20 +195,22 @@ public class EntryActivity extends AppCompatActivity{
      * when shouldUpdate=true, it automatically displays old note and changes the
      * button text to UPDATE
      */
-    private void showNoteDialog(final boolean shouldUpdate, final Entry note, final int position) {
+    private void showNoteDialog(final boolean shouldUpdate, final Entry entry, final int position) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getApplicationContext());
-        View view = layoutInflaterAndroid.inflate(R.layout.note_dialog, null);
+        View view = layoutInflaterAndroid.inflate(R.layout.entry_dialog, null);
 
         AlertDialog.Builder alertDialogBuilderUserInput =
                 new AlertDialog.Builder(EntryActivity.this);
         alertDialogBuilderUserInput.setView(view);
 
-        final EditText inputNote = view.findViewById(R.id.note);
+        final EditText inputBrief = view.findViewById(R.id.brief);
         TextView dialogTitle = view.findViewById(R.id.dialog_title);
-        dialogTitle.setText(!shouldUpdate ? getString(R.string.lbl_new_note_title) : getString(R.string.lbl_edit_note_title));
+        dialogTitle.setText(!shouldUpdate
+                ? getString(R.string.lbl_new_note_title)
+                : getString(R.string.lbl_edit_note_title));
 
-        if (shouldUpdate && note != null) {
-            inputNote.setText(note.getTittle());
+        if (shouldUpdate && entry != null) {
+            inputBrief.setText(entry.getBrief());
         }
         alertDialogBuilderUserInput
                 .setCancelable(false)
@@ -206,7 +234,7 @@ public class EntryActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 // Show toast message when no text is entered
-                if (TextUtils.isEmpty(inputNote.getText().toString())) {
+                if (TextUtils.isEmpty(inputBrief.getText().toString())) {
                     Toast.makeText(EntryActivity.this,
                             Properties.M_ENTER_NOTE, Toast.LENGTH_SHORT).show();
                     return;
@@ -215,12 +243,16 @@ public class EntryActivity extends AppCompatActivity{
                 }
 
                 // check if user updating note
-                if (shouldUpdate && note != null) {
+                if (shouldUpdate && entry != null) {
                     // update note by it's id
-                    updateNote(inputNote.getText().toString(), position);
+                    updateEntry(inputBrief.getText().toString(), position);
                 } else {
-                    // create new note
-                    createNote(inputNote.getText().toString());
+                    // create new entry
+                    Entry en = new Entry(inputBrief.getText().toString(),
+                            inputBrief.getText().toString());
+                    createEntry(en);
+//                    createNote(inputBrief.getText().toString());
+
                 }
             }
         });

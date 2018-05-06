@@ -21,13 +21,13 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.MyViewHolder
     private List<Entry> itemList;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView note;
+        public TextView brief;
         public TextView dot;
         public TextView timestamp;
 
         public MyViewHolder(View view) {
             super(view);
-            note = view.findViewById(R.id.note);
+            brief = view.findViewById(R.id.brief);
             dot = view.findViewById(R.id.dot);
             timestamp = view.findViewById(R.id.timestamp);
         }
@@ -42,7 +42,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.MyViewHolder
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.note_list_row, parent, false);
+                .inflate(R.layout.entry_list_row, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -53,7 +53,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.MyViewHolder
         //Item
         Entry note = itemList.get(position);
         //Set values for the the view node
-        holder.note.setText(note.getTittle());
+        holder.brief.setText(note.getBrief());
         // Displaying dot from HTML character code
         holder.dot.setText(Html.fromHtml(Properties.DOT_COLOR));
         // Formatting and displaying timestamp

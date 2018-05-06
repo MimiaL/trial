@@ -31,7 +31,8 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
                 if (text1.equals("") || text2.equals("") ){
                     //IF THERE IS NO PASSWORD
-                    Toast.makeText(CreatePasswordActivity.this, "No password entered", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreatePasswordActivity.this,
+                            "No password entered", Toast.LENGTH_SHORT).show();
                 }else {
                     if (text1.equals(text2)){
                         //IF A PASSWORD WAS ENTERED, THEN IT IS SAVED
@@ -47,7 +48,8 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         finish();
                     }else {
                         //THERE IS NO MATCH BETWEEN THE PASSWORDS
-                        Toast.makeText(CreatePasswordActivity.this, "Password doesn't match", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreatePasswordActivity.this,
+                                "Password doesn't match", Toast.LENGTH_SHORT).show();
                     }
                 }
 

@@ -22,7 +22,7 @@ public class Properties {
     public static final String K_ERROR = "Error";
 
     //Messages
-    public static final String M_CHOSOSE = "Chosse option";
+    public static final String M_CHOOSE = "Chosse option";
     public static final String M_ENTER_NOTE = "Enter a note!";
 
 

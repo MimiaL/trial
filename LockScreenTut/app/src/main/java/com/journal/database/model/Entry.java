@@ -47,6 +47,17 @@ public class Entry {
         this.tittle = tittle;
     }
 
+    public Entry(int id, String timestamp, String tittle, String brief) {
+        this.id = id;
+        this.timestamp = timestamp;
+        this.tittle = tittle;
+        this.brief = brief;
+    }
+
+    public Entry(String tittle, String brief) {
+        this.tittle = tittle;
+        this.brief = brief;
+    }
 
     public int getId() {
         return id;
